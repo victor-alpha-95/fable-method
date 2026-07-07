@@ -59,6 +59,10 @@ flowchart TD
 
 Dispatch rule: divergence-from-expected always wins. A GUIDE or BUILD request that surfaces something broken becomes SOLVE.
 
+## The enforcement layer
+
+Rules that depend on judgment get skipped under time pressure, so the protocol backs them with mechanical checks: seven **non-negotiables** that outrank everything else in the skill (evidence-or-UNVERIFIED success claims, append-only memory, two-failures-then-escalate, premise checks, and never narrating the protocol in replies); a **reply contract** table specifying what each mode's reply must and must not contain; copyable **checklists** for T2+ diagnosis and non-trivial builds that must be fully checked before results are presented; and a **final-reply gate** run silently on every substantive reply before sending. `references/examples.md` shows worked traces of each mode at the right ceremony level — imitating a correct trace is more reliable than interpreting rules.
+
 ## Triage tiers (SOLVE)
 
 Ceremony scales with stakes. The protocol is how the agent thinks, not a format for replies — trivial fixes get the discipline silently; visible framing and hypothesis ledgers are reserved for work that earns them.
@@ -128,6 +132,7 @@ Key mechanics, each earned by a documented failure:
 | Symptom patch at the wrong level | Cause-fix vs mitigation declared; bandaids recorded as debt |
 | Re-learning lessons every session | Recall and Record unconditional for SOLVE/BUILD |
 | Memory collapse / bloat / staleness | Append-only journal, gated promotion, capped index, counters |
+| Steps silently skipped under time pressure | Copyable T2+/BUILD checklists; final-reply gate on every substantive reply |
 
 Provenance for every empirical claim is in [`references/sources.md`](references/sources.md).
 
@@ -143,6 +148,7 @@ fable-method/
 │   ├── building.md             # BUILD: framing, walking skeleton, edge-case prediction
 │   ├── answering.md            # ANSWER/GUIDE: premise taxonomy, calibration, how-to structure
 │   ├── memory.md               # Memory layout, schemas, write/read/consolidation protocols
+│   ├── examples.md             # Worked traces of each mode at the right ceremony level
 │   └── sources.md              # Provenance for every empirical claim
 ├── docs/
 │   ├── installation.md         # Install on Claude Code, Cowork, and claude.ai
