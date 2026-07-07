@@ -15,6 +15,7 @@ flowchart TD
     S -->|"non-trivial builds"| B["references/building.md"]
     S -->|"high-stakes answers,<br/>suspect premises"| A["references/answering.md"]
     S -->|"bootstrap, T2+ entries,<br/>promotion, consolidation"| M["references/memory.md"]
+    S -->|"unsure what good looks like<br/>for this mode and tier"| X["references/examples.md"]
     style S fill:#2b2617,stroke:#e3b341,color:#e6edf3
     style D fill:#161b22,stroke:#30363d,color:#e6edf3
     style SO fill:#161b22,stroke:#30363d,color:#e6edf3
