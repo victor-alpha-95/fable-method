@@ -4,6 +4,17 @@ Read this file when: bootstrapping memory for the first time, writing a T2+ jour
 
 Design rationale in one paragraph: this system copies what measurably works in the research — append-only raw logs with distilled playbooks maintained by incremental delta edits (the ACE line of work), selective quality-gated storage (storing everything degrades performance), outcome counters as free quality labels, and retrieval by grep-able signatures rather than bulk loading. Its failure modes are equally documented: whole-file rewrites collapse memory catastrophically (one published case: a working 18k-token memory rewritten to 122 tokens in a single step, performing worse than no memory at all), unbounded growth buries signal, and stale or over-generalized lessons become confident wrong answers. Every rule below exists against one of those.
 
+## Contents
+- Layout
+- Platform resolution
+- Bootstrap (first run)
+- Journal entry schema
+- Playbook bullet schema
+- Write protocol
+- Read protocol
+- Consolidation protocol
+- Failure modes this design guards against
+
 ## Layout
 
 ```
