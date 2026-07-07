@@ -23,6 +23,7 @@ flowchart TD
     style B fill:#161b22,stroke:#30363d,color:#e6edf3
     style A fill:#161b22,stroke:#30363d,color:#e6edf3
     style M fill:#161b22,stroke:#30363d,color:#e6edf3
+    style X fill:#161b22,stroke:#30363d,color:#e6edf3
 ```
 
 ## The SOLVE pipeline
