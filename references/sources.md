@@ -36,3 +36,11 @@ Provenance for the empirical claims made in this skill. Read only if verifying o
 - Vincent, "Superpowers" (2025) — subagent memory search to avoid context pollution. https://blog.fsck.com/2025/10/09/superpowers/
 
 Caveats: the premortem effect size (~30%) is widely repeated but traces to one 1989 study; treated qualitatively here. Xiong's headline accuracy numbers come via secondary analysis; treated directionally. ACE/Reflexion gains were measured on repeated same-distribution benchmarks; transfer magnitude to heterogeneous personal workflows is unmeasured.
+
+## Token economy & model routing (added 2026-07-08)
+- @ClaudeDevs thread (2026-07-08) — advisor pattern (~92% of Fable 5 SWE-bench Pro score at ~63% price), orchestrator pattern (96% of Fable 5 BrowseComp performance at 46% price), per-subagent caching. https://x.com/claudedevs/status/2074606058128224365
+- Anthropic cookbook, "Coordinator pattern: big models for planning, small models for execution" — measured ~2.5× cheaper / ~3× faster at matched rigor, 84–98% input at worker rate; caveats: delegation floor cost, decomposition verification, roster blindness, cheap-reader judgment loss. https://github.com/anthropics/claude-cookbooks/blob/main/managed_agents/CMA_plan_big_execute_small.ipynb
+- Claude Platform docs, "Multiagent sessions" — parallelization/specialization/escalation patterns; depth-1, ≤20 roster agents, ≤25 concurrent threads; persistent threads. https://platform.claude.com/docs/en/managed-agents/multi-agent
+- Chen, Zaharia & Zou, "FrugalGPT" (arXiv 2305.05176) — LLM cascades: answer cheap first, escalate on low confidence. https://arxiv.org/abs/2305.05176
+- Router literature (RouteLLM line, ICLR 2025) — ~85% cost reduction at ~95% frontier quality routing ~14% of queries to the strong model; treated directionally (secondary sourcing).
+- This project's EVAL-REPORT.md — local evidence that Haiku-class judgment fails on BUILD semantics (dropped participant, inverted debt direction) while execution succeeds; basis for the minimum-class-per-role rules.
