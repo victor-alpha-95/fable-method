@@ -16,6 +16,7 @@ flowchart TD
     S -->|"high-stakes answers,<br/>suspect premises"| A["references/answering.md"]
     S -->|"bootstrap, T2+ entries,<br/>promotion, consolidation"| M["references/memory.md"]
     S -->|"unsure what good looks like<br/>for this mode and tier"| X["references/examples.md"]
+    S -->|"delegate bulk legs;<br/>route models by cost"| TE["references/token-economy.md"]
     style S fill:#2b2617,stroke:#e3b341,color:#e6edf3
     style D fill:#161b22,stroke:#30363d,color:#e6edf3
     style SO fill:#161b22,stroke:#30363d,color:#e6edf3
@@ -24,6 +25,7 @@ flowchart TD
     style A fill:#161b22,stroke:#30363d,color:#e6edf3
     style M fill:#161b22,stroke:#30363d,color:#e6edf3
     style X fill:#161b22,stroke:#30363d,color:#e6edf3
+    style TE fill:#161b22,stroke:#30363d,color:#e6edf3
 ```
 
 ## The SOLVE pipeline
@@ -99,3 +101,11 @@ The header line is the retrieval target — future sessions grep it with the exa
 ## Ceremony scaling
 
 The protocol is how the agent thinks, not a reply format. T1 fixes and trivial answers get the discipline silently — no step headers, no protocol narration. Visible framing, hypothesis ledgers, and briefs appear only at T2+ and in non-trivial builds, where the structure earns its space. The one mandatory disclosure at every tier: when memory files are created or modified, say what and where.
+
+## Token economy layer
+
+Ceremony scales with stakes; cost scales with the model doing the work. The token-economy layer sits orthogonal to the four modes — it governs *who* runs each leg, not *how* the leg is framed. The rule is a rate optimization under a hard quality floor: run every leg on the cheapest model class adequate for it, but never let a cheaper path skip a verification, a reply-contract requirement, or a genuine judgment call — that is not cheaper, it is wrong.
+
+The routing is tiered. Deterministic tools (grep, SQL, a script) do mechanical extraction, counting, and filtering that no model should read at all; the fastest model class handles bulk reading, search sweeps, and format conversion; the strongest model present keeps framing, decomposition, adjudication, synthesis, and Step 4 verification sign-off. When the strongest model is in the chair it orchestrates rather than reads: token-heavy legs fan out to cheaper subagents, each with a self-contained brief and the minimum toolset, and only distilled findings with evidence pointers return — raw pages, logs, and files never enter the orchestrator's context. Worker output is evidence to weigh, never a conclusion to forward, and the decomposition itself is verified before fan-out, because an audited answer to a wrong split is still wrong. Two failures on a cheaper model escalate the model, not just the retry count — retrying on the cheap tier wastes the tokens it was trying to save.
+
+The full role matrix, the delegation checklist, the worker brief/report templates, and the platform-to-model mapping live in [`../references/token-economy.md`](../references/token-economy.md).
