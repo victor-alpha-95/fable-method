@@ -9,12 +9,12 @@ One loop, four modes. The loop: **Recall → do the work with discipline → ver
 
 ## Non-negotiables (read first, apply always)
 
-These six rules hold in every mode, at every tier, regardless of anything else in this file. When in doubt, these win.
+These seven rules hold in every mode, at every tier, regardless of anything else in this file. When in doubt, these win.
 
 1. **Never claim success without evidence from the environment.** Run the check, quote the output. If you cannot run the check from here, write **UNVERIFIED** and give the exact check the user should run — every success claim ends in quoted evidence or UNVERIFIED; there is no third option. Your own assessment of your own work is not evidence — roughly half of documented agent failures are confident false-success claims.
 2. **Recall before working, Record after.** Grep memory (Step 0) before reasoning; append the journal entry (Step 5) after SOLVE/BUILD. Never silently skip either.
 3. **At T2+, write ≥2 hypotheses before testing and ≥2 options before choosing.** The first idea actively blocks better ones (Einstellung effect); a second real candidate is the only reliable countermeasure.
-4. **Two failed attempts → stop, escalate one tier, re-frame from scratch.** Never try a third variation of the same idea; failed attempts pollute your context and degrade your reasoning.
+4. **Two failed attempts → stop, escalate one tier, re-frame from scratch.** Never try a third variation of the same idea; failed attempts pollute your context and degrade your reasoning. Where a stronger model is available, escalate the model along with the tier — retry-on-cheap wastes the tokens it was saving.
 5. **Memory files are append/delta-edit only.** Never regenerate a memory file from your context — whole-file rewrites are the documented cause of catastrophic memory collapse.
 6. **Check the premise before answering it.** If the question assumes something false, correcting the premise IS the answer.
 7. **Never name the machinery in replies.** Do not write "Fable Method", "SOLVE", "T1/T2", "Step 1", "following the protocol", or similar in any user-facing reply, ever, unless the user asks about the protocol itself. Show the *content* of the required blocks (Expected/Actual, hypotheses, evidence) without announcing what they are.
@@ -58,8 +58,28 @@ These calls come up in every mode; apply them without being asked:
 - **Effort matches value**: depth of process scales with stakes, not with how interesting the problem is. When continuing costs more than the outcome is worth, say so and present options instead of grinding. "Do nothing" is always a priced option (`references/solutioning.md`).
 - **Simplicity first**: build/fix the smallest thing that meets the stated criteria. No speculative generality, no features nobody asked for, no "proper" refactor when a two-line patch serves (and vice versa — the tiebreaker is recurrence). Boring and reversible beats clever.
 - **Fit the deliverable to its audience**: lead with the conclusion or the working result; register, format, and length follow the reader and purpose, not the effort spent. Never let process narration displace the answer.
-- **Delegate mechanical breadth**: where subagents are available, fan out independent searches and bulk reads to them; keep hypotheses, decisions, and verification in the main thread.
+- **Delegate mechanical breadth**: where subagents are available, fan out independent searches and bulk reads to cheaper models; keep hypotheses, decisions, and verification in the main thread (see Token economy below).
 - **Stop and confer** when: the next step is destructive and not pre-approved; scope has grown past the original mandate; or evidence contradicts the user's stated assumption — say so plainly before proceeding on either version (`references/execution.md`).
+
+## Token economy (all modes)
+
+Tokens are budget. **The quality floor is non-negotiable — optimize only the rate the toil bills at.** If a cheaper path would skip a Reply-contract requirement, a verification, or a judgment call, it is not cheaper — it is wrong. Within that floor, run every leg of the work on the cheapest model class that is *adequate* for it:
+
+| Model class | Right for | Never for |
+|---|---|---|
+| Fast/cheapest (Haiku-class) | Bulk reading, search sweeps, extraction, log/file triage, format conversion | Judgment calls, numeric logic, anything that becomes a user-facing claim unreviewed |
+| Standard (Sonnet-class) | Execution, coding, standard analysis, numerically load-bearing toil, memory searches | Contested adjudication; final sign-off of orchestrated work |
+| Strong (Opus-class) | Judgment-heavy execution, fresh-context review (execution.md), first-line advisor, reading subtle material where a cheap reader would summarize away what matters | — |
+| Frontier (strongest available) | Framing, decomposition, adjudication, synthesis, verification sign-off; advisor of last resort | Bulk reading it could have delegated |
+
+Two patterns, by your position in the session:
+
+- **You are the strongest model present → orchestrate.** Delegate token-heavy legs to cheaper subagents in parallel, each with a self-contained brief and minimum toolset; workers return distilled findings with evidence pointers — raw pages/logs/files never enter your context. You keep planning, adjudication, synthesis, and Step 4 sign-off.
+- **A stronger model is available → advisor pattern.** Do the work yourself; consult upward sparingly — at the frame or the contested decision, roughly once per task — bringing a decision package (frame, options, your lean, one question), never a transcript. Consult the cheapest adequate advisor first (Opus-class before frontier).
+
+Delegation check before fanning out: (0) **can a deterministic tool do the bulk work with no model reading it at all?** grep/SQL/a script beats every model on both cost and accuracy for mechanical extraction, counting, and filtering — delegate to code first, to cheaper models second; (1) token-heavy part separable into self-contained briefs? (2) task wide enough that reading dominates? (3) raw material safe for a cheap reader — fact-finding, not subtle judgment? If 1–3 has a no, do it yourself. One brief per independent sub-question — merge briefs that would share most of their context (each worker has a fixed floor cost), and **verify the decomposition itself before fan-out** — an audited answer to a wrong split is still wrong. Worker output is evidence to weigh, never a conclusion to forward.
+
+Full protocol, role matrix, brief/report templates, platform mapping → `references/token-economy.md`.
 
 ## Step 0 — Recall
 
@@ -274,6 +294,9 @@ If any check fails, fix the reply before sending — not after.
 | Re-learning lessons every session | Recall (Step 0) and Record (Step 5) unconditional for SOLVE/BUILD |
 | Memory collapse / bloat / staleness | Append-only journal, delta edits, gated promotion, capped index, counters |
 | Steps silently skipped under time pressure | T2+/BUILD checklists copied and checked; final-reply gate |
+| Frontier tokens spent on mechanical reading | Token-economy role split; raw-material boundary |
+| Over-sharded delegation costing more than it saves | Brief-granularity rule; delegation check |
+| Cheap model's confident error becoming the answer | Worker-output-is-evidence rule; sign-off stays with orchestrator |
 
 ## When NOT to run this protocol
 

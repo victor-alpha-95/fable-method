@@ -63,6 +63,10 @@ Dispatch rule: divergence-from-expected always wins. A GUIDE or BUILD request th
 
 Rules that depend on judgment get skipped under time pressure, so the protocol backs them with mechanical checks: seven **non-negotiables** that outrank everything else in the skill (evidence-or-UNVERIFIED success claims, append-only memory, two-failures-then-escalate, premise checks, and never narrating the protocol in replies); a **reply contract** table specifying what each mode's reply must and must not contain; copyable **checklists** for T2+ diagnosis and non-trivial builds that must be fully checked before results are presented; and a **final-reply gate** run silently on every substantive reply before sending. `references/examples.md` shows worked traces of each mode at the right ceremony level — imitating a correct trace is more reliable than interpreting rules.
 
+## Token economy
+
+Tokens are budget, and the model doing a leg of work should be the cheapest one adequate for it — but the quality floor is non-negotiable: a cheaper path that would skip a verification, a reply-contract requirement, or a judgment call is not cheaper, it is wrong. Bulk reading, search sweeps, and mechanical extraction go to the fastest model class (or, better, to a deterministic tool — grep, SQL, a script — that no model reads at all); framing, decomposition, adjudication, synthesis, and verification sign-off stay on the strongest model present. When it is the strongest model, it orchestrates: token-heavy legs fan out to cheaper subagents with self-contained briefs and minimum toolsets, and only distilled findings — never raw pages, logs, or files — come back into its context. Two failures on a cheaper model escalate the model, not just the retry count. Full role matrix, delegation checklist, brief/report templates, and platform mapping live in [`references/token-economy.md`](references/token-economy.md).
+
 ## Triage tiers (SOLVE)
 
 Ceremony scales with stakes. The protocol is how the agent thinks, not a format for replies — trivial fixes get the discipline silently; visible framing and hypothesis ledgers are reserved for work that earns them.
@@ -133,6 +137,7 @@ Key mechanics, each earned by a documented failure:
 | Re-learning lessons every session | Recall and Record unconditional for SOLVE/BUILD |
 | Memory collapse / bloat / staleness | Append-only journal, gated promotion, capped index, counters |
 | Steps silently skipped under time pressure | Copyable T2+/BUILD checklists; final-reply gate on every substantive reply |
+| Frontier tokens spent on mechanical reading | Token-economy role split — bulk reading and extraction delegated to cheaper models or deterministic tools, judgment and verification kept on the strongest model |
 
 Provenance for every empirical claim is in [`references/sources.md`](references/sources.md).
 
@@ -149,6 +154,7 @@ fable-method/
 │   ├── answering.md            # ANSWER/GUIDE: premise taxonomy, calibration, how-to structure
 │   ├── memory.md               # Memory layout, schemas, write/read/consolidation protocols
 │   ├── examples.md             # Worked traces of each mode at the right ceremony level
+│   ├── token-economy.md        # Model-tier routing: delegate bulk work to cheaper models
 │   └── sources.md              # Provenance for every empirical claim
 ├── docs/
 │   ├── installation.md         # Install on Claude Code, Cowork, and claude.ai
