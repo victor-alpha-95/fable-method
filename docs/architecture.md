@@ -4,11 +4,14 @@ How the pieces fit, and why each one exists. Every design choice here traces to 
 
 ## Progressive disclosure
 
-`SKILL.md` is the only file loaded at invocation — it carries the full protocol in compressed form. Reference files are read lazily, when the work reaches the step they cover. This keeps trivial tasks cheap and deep tasks fully equipped.
+`SKILL.md` is the only file loaded at invocation — a deliberately thin core carrying the non-negotiables, mode dispatch, tiering rules, and verification essentials. Everything detailed loads by tier: T1 work loads nothing; T2 loads `protocol.md` (and `deep-execution.md` when the task has executable or computable artifacts); T3 pulls the deep references as each step needs them. This keeps trivial tasks cheap and deep tasks fully equipped.
 
 ```mermaid
 flowchart TD
-    S["SKILL.md<br/>always loaded — compressed protocol"]
+    S["SKILL.md — thin core<br/>non-negotiables · dispatch ·<br/>tiering · essentials"]
+    S -->|"T2+: forms, ledger,<br/>checklists, reply contract"| P["references/protocol.md"]
+    S -->|"T2+ with executable or<br/>computable artifacts"| DE["references/deep-execution.md"]
+    S -->|"orchestrating subagents,<br/>budgeting spend"| TE["references/token-economy.md"]
     S -->|"T3 diagnosis, stuck at T2,<br/>intermittent, data discrepancy"| D["references/diagnosis.md"]
     S -->|"consequential or<br/>contested fix choice"| SO["references/solutioning.md"]
     S -->|"high-stakes changes,<br/>incidents, reviews"| E["references/execution.md"]
@@ -16,8 +19,10 @@ flowchart TD
     S -->|"high-stakes answers,<br/>suspect premises"| A["references/answering.md"]
     S -->|"bootstrap, T2+ entries,<br/>promotion, consolidation"| M["references/memory.md"]
     S -->|"unsure what good looks like<br/>for this mode and tier"| X["references/examples.md"]
-    S -->|"delegate bulk legs;<br/>route models by cost"| TE["references/token-economy.md"]
     style S fill:#2b2617,stroke:#e3b341,color:#e6edf3
+    style P fill:#1f2637,stroke:#58a6ff,color:#e6edf3
+    style DE fill:#1f2637,stroke:#58a6ff,color:#e6edf3
+    style TE fill:#1f2637,stroke:#3fb950,color:#e6edf3
     style D fill:#161b22,stroke:#30363d,color:#e6edf3
     style SO fill:#161b22,stroke:#30363d,color:#e6edf3
     style E fill:#161b22,stroke:#30363d,color:#e6edf3
@@ -25,7 +30,6 @@ flowchart TD
     style A fill:#161b22,stroke:#30363d,color:#e6edf3
     style M fill:#161b22,stroke:#30363d,color:#e6edf3
     style X fill:#161b22,stroke:#30363d,color:#e6edf3
-    style TE fill:#161b22,stroke:#30363d,color:#e6edf3
 ```
 
 ## The SOLVE pipeline
@@ -79,7 +83,9 @@ sequenceDiagram
     P->>I: rebuild "Top lessons" verbatim from playbook files
 ```
 
-The asymmetry is deliberate: writes to the journal are cheap and unconditional (for SOLVE/BUILD); writes to the playbook are expensive and gated. Research on agent memory found selective storage beats store-everything, and that outcome counters — free quality labels — are what keep a distilled playbook trustworthy. The one operation that is never allowed is regenerating a whole memory file from context: whole-file rewrites are the documented cause of catastrophic memory collapse.
+The asymmetry is deliberate: writes to the journal are cheap; writes to the playbook are expensive and gated. Research on agent memory found selective storage beats store-everything, and that outcome counters — free quality labels — are what keep a distilled playbook trustworthy. The one operation that is never allowed is regenerating a whole memory file from context: whole-file rewrites are the documented cause of catastrophic memory collapse.
+
+Two gates refine what gets written at all. The **rediscovery gate**: a full entry is earned only when a fresh frontier model could not cheaply re-derive the lesson from the artifacts alone (diagnosis took many tool calls, needed information outside the workspace, or a first attempt failed) — everything else gets a one-liner or nothing. The **provenance rule**: constraints that exist only outside the artifacts (verbal mandates, vetoes, contractual interfaces) are recorded with their *authority*, not just their content — a future session reading only the code cannot distinguish a mandate from a preference, and recorded authority is the one channel no model capability replaces.
 
 ## Journal entry anatomy
 
@@ -102,10 +108,8 @@ The header line is the retrieval target — future sessions grep it with the exa
 
 The protocol is how the agent thinks, not a reply format. T1 fixes and trivial answers get the discipline silently — no step headers, no protocol narration. Visible framing, hypothesis ledgers, and briefs appear only at T2+ and in non-trivial builds, where the structure earns its space. The one mandatory disclosure at every tier: when memory files are created or modified, say what and where.
 
-## Token economy layer
+Ceremony also calibrates to **model class**, not just stakes: frontier models default one tier lighter and escalate reactively after the first failed attempt (benchmarks show they pass most guardrail checks unprompted, so ceremony is paid for reactively); smaller models take the stakes table at face value, and additionally load `deep-execution.md` on executable work — which converts frontier habits like symptom ledgers with zero-residual accounting, independent recomputation, and probe-don't-simulate into mechanical procedure. High stakes or irreversibility force full ceremony regardless of model.
 
-Ceremony scales with stakes; cost scales with the model doing the work. The token-economy layer sits orthogonal to the four modes — it governs *who* runs each leg, not *how* the leg is framed. The rule is a rate optimization under a hard quality floor: run every leg on the cheapest model class adequate for it, but never let a cheaper path skip a verification, a reply-contract requirement, or a genuine judgment call — that is not cheaper, it is wrong.
+## The token-economy layer
 
-The routing is tiered. Deterministic tools (grep, SQL, a script) do mechanical extraction, counting, and filtering that no model should read at all; the fastest model class handles bulk reading, search sweeps, and format conversion; the strongest model present keeps framing, decomposition, adjudication, synthesis, and Step 4 verification sign-off. When the strongest model is in the chair it orchestrates rather than reads: token-heavy legs fan out to cheaper subagents, each with a self-contained brief and the minimum toolset, and only distilled findings with evidence pointers return — raw pages, logs, and files never enter the orchestrator's context. Worker output is evidence to weigh, never a conclusion to forward, and the decomposition itself is verified before fan-out, because an audited answer to a wrong split is still wrong. Two failures on a cheaper model escalate the model, not just the retry count — retrying on the cheap tier wastes the tokens it was trying to save.
-
-The full role matrix, the delegation checklist, the worker brief/report templates, and the platform-to-model mapping live in [`../references/token-economy.md`](../references/token-economy.md).
+Cost discipline sits beside — never above — the quality gates: every verification form and reply-contract row binds regardless of which model does the work. The ladder: deterministic tools first (no model reads what grep or SQL can compute); measure the reading volume before fanning out (each subagent carries a ~20–25k-token setup floor, so small jobs stay with one reader); then the cheapest adequate class per leg — Haiku-class reads and extracts (returning evidence, never conclusions), Sonnet-class executes, and the strongest model in session frames, adjudicates, and signs off. Delegating judgment below its minimum tier is the failure the layer exists to prevent: a wrong cheap answer costs more than the delta to the right model. Full role matrix, brief templates, and cost accounting: `references/token-economy.md`.
