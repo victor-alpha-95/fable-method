@@ -61,11 +61,13 @@ Dispatch rule: divergence-from-expected always wins. A GUIDE or BUILD request th
 
 ## The enforcement layer
 
-Rules that depend on judgment get skipped under time pressure, so the protocol backs them with mechanical checks: seven **non-negotiables** that outrank everything else in the skill (evidence-or-UNVERIFIED success claims, append-only memory, two-failures-then-escalate, premise checks, and never narrating the protocol in replies); a **reply contract** table specifying what each mode's reply must and must not contain; copyable **checklists** for T2+ diagnosis and non-trivial builds that must be fully checked before results are presented; and a **final-reply gate** run silently on every substantive reply before sending. `references/examples.md` shows worked traces of each mode at the right ceremony level — imitating a correct trace is more reliable than interpreting rules.
+Rules that depend on judgment get skipped under time pressure, so the protocol backs them with mechanical checks: eight **non-negotiables** that outrank everything else in the skill (evidence-or-UNVERIFIED success claims, a failure-drill rule for anything that detects or recovers from failure, premise checks that extend to "authoritative" inputs, two-failures-then-escalate, append-only memory, and never narrating the protocol in replies); a **reply contract** table specifying what each mode's reply must and must not contain; copyable **checklists** for T2+ diagnosis and non-trivial builds; and a **final-reply gate** run silently on every substantive reply before sending. `references/examples.md` shows worked traces of each mode at the right ceremony level — imitating a correct trace is more reliable than interpreting rules.
 
-## Token economy
+## Thin core, loaded on demand
 
-Tokens are budget, and the model doing a leg of work should be the cheapest one adequate for it — but the quality floor is non-negotiable: a cheaper path that would skip a verification, a reply-contract requirement, or a judgment call is not cheaper, it is wrong. Bulk reading, search sweeps, and mechanical extraction go to the fastest model class (or, better, to a deterministic tool — grep, SQL, a script — that no model reads at all); framing, decomposition, adjudication, synthesis, and verification sign-off stay on the strongest model present. When it is the strongest model, it orchestrates: token-heavy legs fan out to cheaper subagents with self-contained briefs and minimum toolsets, and only distilled findings — never raw pages, logs, or files — come back into its context. Two failures on a cheaper model escalate the model, not just the retry count. Full role matrix, delegation checklist, brief/report templates, and platform mapping live in [`references/token-economy.md`](references/token-economy.md).
+`SKILL.md` is deliberately small — a dispatcher carrying only the non-negotiables, tiering rules, and essentials. The detailed forms live in `references/` and load by tier: `protocol.md` (reply contract, frame blocks, hypothesis ledger, verification form, checklists) at T2+; `deep-execution.md` at T2+ when the task has executable or computable artifacts and the executing model may not be the strongest class in play — it encodes frontier habits (symptom ledgers with zero-residual accounting, independent recomputation, probe-don't-simulate, a classic-trap sweep, generator/evaluator separation) as mechanical procedure; and `token-economy.md` when orchestrating subagents or budgeting spend.
+
+Two calibration rules govern cost: **model-class calibration** (frontier models default one ceremony tier lighter and escalate reactively; smaller models take the stakes table at face value) and a **token-economy ladder** (deterministic tools before any model; measure reading volume before fanning out to subagents; cheapest adequate model class per leg, with judgment and sign-off never delegated below their minimum tier).
 
 ## Triage tiers (SOLVE)
 
@@ -120,6 +122,8 @@ Key mechanics, each earned by a documented failure:
 - **Gated promotion.** A lesson enters the playbook only if generalizable, evidence-linked, and not already there. Controlled studies found agents that stored everything performed worse than agents that stored selectively.
 - **Honest counters.** Every playbook bullet carries `helpful:` / `harmful:` counts updated after each application — outcomes are free quality labels, and consolidation demotes bullets that mislead.
 - **Grep, don't browse.** Retrieval keys off exact error strings and tags in entry headers; loading more than ~3 journal entries is treated as a smell.
+- **The rediscovery gate.** A full journal entry is written only when a fresh frontier model could not cheaply re-derive the lesson from the artifacts alone — journaling trivially re-derivable lessons costs more than it saves.
+- **The provenance rule.** Constraints that exist only outside the artifacts — verbal mandates, vetoes, contractual interfaces — are recorded *with their authority*, not just their content, because a future session reading only the code cannot distinguish a mandate from a preference.
 
 ## What each rule blocks
 
@@ -137,7 +141,10 @@ Key mechanics, each earned by a documented failure:
 | Re-learning lessons every session | Recall and Record unconditional for SOLVE/BUILD |
 | Memory collapse / bloat / staleness | Append-only journal, gated promotion, capped index, counters |
 | Steps silently skipped under time pressure | Copyable T2+/BUILD checklists; final-reply gate on every substantive reply |
-| Frontier tokens spent on mechanical reading | Token-economy role split — bulk reading and extraction delegated to cheaper models or deterministic tools, judgment and verification kept on the strongest model |
+| Silent failure-path breakage | Failure-drill non-negotiable: simulate the failure, quote the alarm |
+| Memory that costs more than it saves | Rediscovery gate on every Record step |
+| Frontier tokens spent on mechanical reading | Code-first rung, reading measured before fan-out, cheapest-adequate model per leg |
+| A cheap model's error becoming the answer | Worker output treated as evidence; verification sign-off never delegated |
 
 Provenance for every empirical claim is in [`references/sources.md`](references/sources.md).
 
@@ -145,8 +152,11 @@ Provenance for every empirical claim is in [`references/sources.md`](references/
 
 ```
 fable-method/
-├── SKILL.md                    # Entry point — the compressed protocol, all four modes
+├── SKILL.md                    # Thin core — non-negotiables, dispatch, tiering, essentials
 ├── references/
+│   ├── protocol.md             # T2+ detail: reply contract, frame blocks, ledger, checklists
+│   ├── deep-execution.md       # Frontier habits as procedure: symptom ledger, probes, trap sweep
+│   ├── token-economy.md        # Model roles, delegation mechanics, cost accounting
 │   ├── diagnosis.md            # Full SOLVE toolkit: IS/IS-NOT, bisection, domain playbooks
 │   ├── solutioning.md          # Option generation, steelmanning, pre-mortems, decision records
 │   ├── execution.md            # Checkpointed execution, verification patterns, incident mode
@@ -154,7 +164,6 @@ fable-method/
 │   ├── answering.md            # ANSWER/GUIDE: premise taxonomy, calibration, how-to structure
 │   ├── memory.md               # Memory layout, schemas, write/read/consolidation protocols
 │   ├── examples.md             # Worked traces of each mode at the right ceremony level
-│   ├── token-economy.md        # Model-tier routing: delegate bulk work to cheaper models
 │   └── sources.md              # Provenance for every empirical claim
 ├── docs/
 │   ├── installation.md         # Install on Claude Code, Cowork, and claude.ai
@@ -164,7 +173,7 @@ fable-method/
 └── LICENSE                     # MIT
 ```
 
-The skill is progressive-disclosure by design: `SKILL.md` is always loaded; reference files are read only when the work reaches the step they cover.
+The skill is progressive-disclosure by design: the thin `SKILL.md` core is always loaded; reference files are read only at the tier — and for the artifact types — that need them.
 
 ## Installation
 
